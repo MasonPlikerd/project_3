@@ -1,6 +1,4 @@
-# Global Temperature Anomalies Visualization Project
-
-## Overview
+##Overview
 
 This project visualizes global temperature anomalies from 1880 to the present using data from various temperature datasets. The primary objective is to present the temperature anomalies over time and highlight how they have changed globally. It includes interactive visualizations that allow users to explore the temperature anomalies by year and month.
 
