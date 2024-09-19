@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sea Level Visualization</title>
+  <style>
+    #map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+</style>
+
+</head>
+<body>
+  <div id="map-container"></div>
+  
+  <div id='sidebar' class='w240-mm w-full prose h-full-mm color-white border-r border--black absolute top-mm bottom left p12 p24-mm opacity100-mm z4'>
+    <div id='title' class='py12'>
+      <h4 class='custom-Zilla custom-ffc300' style = "color:#3fc5ea;"> Sea Level Interactive </h4>
+    </div>
+    <div id='intro' class='py12 none block-mm'>
+      <p></p>
+    </div>
+    <div style="display: flex; align-items: center;">
+      <input name="slider-sea" type="range" min="1" max="10" value="0" class="slider" id="height-sea">
+      <span id="selected-height" style="font-size: 8px; margin-left: 5px;">1ft</span>
+      <button id="clear" class="clear-button" style="margin-left: 5px; color:rgb(40, 204, 215);">X</button>
+    </div>
+
+<div class="btn-container">
+  <label>
+    <input type="checkbox" class="btn-radio" name="radio-btn" value="Sea Level" id="sl" >
+    <span class="radio-label">Sea Level</span>
+  </label>
+  
+</div>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+  <script src="js/seaLevel.js" type="module"></script>
+ 
+  <link href="https://fonts.googleapis.com/css?family=Zilla+Slab" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-assembly/v0.13.0/assembly.min.css" rel="stylesheet">
+</body>
+</html>
