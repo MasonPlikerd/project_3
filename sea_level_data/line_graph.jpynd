@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the data
+file_path = 'sea_level_data/sealeveldata.txt'  
+column_names = ['index', 'A', 'year', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+data = pd.read_csv(file_path, delim_whitespace=True, names=column_names, skiprows=1)
+
+# Extract the year and a sea level measurement column 
+years = data['year']
+sea_level = data['D']
+
+# Create a line plot
+plt.figure(figsize=(10, 6))
+plt.plot(years, sea_level, label='Sea Level ', color='blue')
+plt.xlabel('Year')
+plt.ylabel('Sea Level (mm)')
+plt.title('Sea Level Over Time')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+
+# Save the plot to a file
+output_path = 'sealevel_line_graph.png'  
+plt.savefig(output_path)
+
+# Display the plot
+plt.show()
