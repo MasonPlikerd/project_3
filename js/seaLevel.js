@@ -16,9 +16,7 @@ const urlMap = {
   
   sl.addEventListener("click",()=>{
     if (sl.checked){
-      if (map.getLayer('raster-layer'+"High Risk Flood")){ map.removeLayer('raster-layer'+"High Risk Flood");}
-      if (map.getLayer('raster-layer'+"Sea Vulnerability")){ map.removeLayer('raster-layer'+"Sea Vulnerability")};
-  
+      
       [1,2,3,4,5,6,7,8,9,10].forEach(function(h) {
         var layerId = 'raster-layer'+"Sea Level" +h;
         if (map.getLayer(layerId)) {
@@ -50,17 +48,14 @@ const urlMap = {
   } );
 });
   
- 
 
   clear.addEventListener("click", ()=>{
-    if (map.getLayer('raster-layer'+"Sea Vulnerability")){ map.removeLayer('raster-layer'+"Sea Vulnerability");}
     [1,2,3,4,5,6,7,8,9,10].forEach(function(h) {
       var layerId = 'raster-layer'+"Sea Level" +h;
       if (map.getLayer(layerId)) {
           map.removeLayer(layerId);
       }
     });
-      if (map.getLayer('raster-layer'+"High Risk Flood")){ map.removeLayer('raster-layer'+"High Risk Flood");}
 
   });
   
