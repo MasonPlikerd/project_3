@@ -1,4 +1,3 @@
-// Load the CSV data
 d3.csv("fossil_CO2_totals_by_country.csv").then(function(data) {
     console.log("Data loaded:", data); // Log the data to inspect its structure
 
@@ -6,8 +5,13 @@ d3.csv("fossil_CO2_totals_by_country.csv").then(function(data) {
     const cleanedData = data.map(d => {
         return {
             Country: d.Country,
+            // Create an object with year as keys and emissions as values
             ...Object.fromEntries(
-                Object.entries(d).filter(([key]) => !['substance', 'EDGAR code'].includes(key))
+                Object.entries(d).filter(([key]) => {
+                    // Keep only year columns (D to BC)
+                    const year = parseInt(key);
+                    return !isNaN(year) && year >= 1970 && year <= 2021;
+                })
             )
         };
     });
@@ -33,6 +37,25 @@ d3.csv("fossil_CO2_totals_by_country.csv").then(function(data) {
         const filteredData = cleanedData.find(d => d.Country === selectedCountry); // Find the data for the selected country
         const emissionsValue = filteredData ? +filteredData[selectedYear] : 0; // Get the emissions value for the selected year
 
+        console.log(`Selected Country: ${selectedCountry}, Year: ${selectedYear}, Emissions Value: ${emissionsValue}`); // Debugging output
+
+        // Calculate min and max emissions for the selected country
+        const countryEmissions = Object.entries(filteredData)
+            .filter(([key]) => key !== 'Country')
+            .map(([key, value]) => +value)
+            .filter(value => !isNaN(value));
+
+        const countryMinEmissions = Math.min(...countryEmissions);
+        const countryMaxEmissions = Math.max(...countryEmissions);
+
+        console.log(`Country Minimum emissions: ${countryMinEmissions}`);
+        console.log(`Country Maximum emissions: ${countryMaxEmissions}`);
+
+        // Create a color scale using country min and max
+        const colorScale = d3.scaleLinear()
+            .domain([countryMinEmissions, countryMaxEmissions]) // Input domain
+            .range(["lightblue", "darkred"]); // Output range of colors
+
         let unit;
         if (selectedYear === 'Change from 1970/2021') {
             unit = 'Percent Change';
@@ -45,14 +68,12 @@ d3.csv("fossil_CO2_totals_by_country.csv").then(function(data) {
             locations: [selectedCountry],
             locationmode: 'country names',
             z: [emissionsValue], // This is the data value that will be mapped to the color scale
-            colorscale: [
-                [0, 'green'],   // Minimum value color
-                [0.5, 'yellow'], // Midpoint color
-                [1, 'red']      // Maximum value color
-            ],
+            colorscale: colorScale.range(), // Use the country-specific color scale
             colorbar: {
                 title: `Emissions (${unit})`
-            }
+            },
+            zmin: countryMinEmissions, // Set min for color scale
+            zmax: countryMaxEmissions  // Set max for color scale
         };
 
         const layout = {
@@ -68,7 +89,7 @@ d3.csv("fossil_CO2_totals_by_country.csv").then(function(data) {
         Plotly.newPlot('map', [trace], layout);
     }
 
-    // Event listeners for dropdown changes
+    // Add event listeners to dropdowns to call updateMap when selections change
     countryDropdown.on("change", function() {
         const selectedCountry = d3.select(this).property("value");
         const selectedYear = yearDropdown.property("value");
@@ -80,12 +101,4 @@ d3.csv("fossil_CO2_totals_by_country.csv").then(function(data) {
         const selectedYear = d3.select(this).property("value");
         updateMap(selectedCountry, selectedYear);
     });
-
-    // Initial map display with default values
-    const defaultCountry = countries[0]; // Set the default country
-    const defaultYear = years[0]; // Set the default year
-    updateMap(defaultCountry, defaultYear); // Update the map with default values
-}).catch(function(error) {
-    console.error("Error loading the CSV file:", error);
-    alert("Failed to load the CSV file. Check the console for more details.");
 });
